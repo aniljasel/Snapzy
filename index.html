@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTFcls-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/media/pro.png" type="image/x-icon">
+    <title>Snapzy</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/font-style.css">
+</head>
+
+<body>
+    <audio id="audio-player" preload="auto">
+        <source id="audio-source" src="" type="audio/mpeg">
+    </audio>
+
+    <header>
+        <img src="/media/logo.png">
+        <h1>Snapzy</h1>
+        <div class="nav-pro-container">
+            <div class="pro">
+                <img src="/media/pro.png" alt="User Profile" id="openRegister">
+            </div>
+        </div>
+    </header>
+
+    <div id="searchContainer">
+        <img src="/media/logo.png" alt="Logo" class="logo">
+        <input type="text" id="searchQuery" placeholder="      Search for songs...">
+        <button id="searchButton" onclick="searchYouTube()">
+            <i class="fa fa-search"></i> 
+        </button>
+    </div>
+    <div class="searchResults">
+        <div id="videoPlayer"></div>
+        <div id="videoResults"></div>
+    </div>
+    <button id="loadMoreBtn" style="display: none;">See More</button>
+
+    <!--Footer icons Home, library, playlist, settins -->
+    <div class="mobile-footer">
+        <div class="footer-item">
+            <a href="index.html" class="fa fa-home"></a>
+            <p>Home</p>
+        </div>
+        <div class="footer-item">
+            <a href="shorts.html" class="fa fa-play-circle"></a>
+            <p>Shorts</p>
+        </div>
+        <div class="footer-item">
+            <a href="#music" class="fa fa-music"></a>
+            <p>Music</p>
+        </div>
+        <div class="footer-item">
+            <a href="#settings-popup" id="footer-set-btn" class="fa fa-cog"></a>
+            <p>Settings</p>
+        </div>
+    </div>
+
+    <footer class="footer-container" id="contact">
+        <div class="footer-bottom">
+            <div class="social-icons" role="navigation" aria-label="Social media links">
+                <a href="https://www.facebook.com/anilkumar.jasel/" target="_blank" class="social-icon" aria-label="Facebook"><i class="fa fa-facebook-f"></i></a>
+                <a href="https://x.com/theai__in" target="_blank" class="social-icon" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+                <a href="https://www.instagram.com/theai.in/" target="_blank" class="social-icon" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/mr-anil-kumar/" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
+                <a href="https://github.com/aniljasel/" target="_blank" class="social-icon" aria-label="github"><i class="fa fa-github"></i></a>
+            </div>
+        </div>
+        <button onclick="topFunction()" class="back-to-top" aria-label="Back to top">↑</button>
+    </footer>
+    <div class="copyright">
+        <p>&copy; 2025 Music Player. All rights reserved by ANIL KUMAR.</p>
+    </div>
+    <script>
+        // top button ------------------------------
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            let button = document.querySelector(".back-to-top");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                button.style.display = "block";
+            } else {
+                button.style.display = "none";
+            }
+        }
+
+        function topFunction() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+    <!--Progressive Web App-->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
+    </script>
+
+    <script>
+        // Register Service Worker
+        document.addEventListener('DOMContentLoaded', () => {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/js/service-worker.js')
+                    .then(reg => console.log('Service Worker Registered!', reg))
+                    .catch(err => console.log('Service Worker Failed:', err));
+            }
+        });
+    </script>
+
+    <script src="/js/mp4.js"></script>
+    <script src="/js/footer-popup.js"></script>
+
+    <script>
+        if (window.jQuery) {
+            delete window.jQuery;
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/media/pro.png" type="image/x-icon">
+    <title>Snapzy</title>
+    <link rel="stylesheet" href="/css/shorts.css">
+    <link rel="stylesheet" href="/css/font-style.css">
+</head>
+
+<body>
+    <header>
+        <img src="/media/logo.png">
+        <h1>Snapzy</h1>
+        <div class="nav-pro-container">
+            <div class="pro">
+                <img src="/media/pro.png" alt="User Profile" id="openRegister">
+            </div>
+        </div>
+    </header>
+
+    <div id="shortsContainer">
+        <div id="shortsList"></div>
+    </div>
+
+    <!--Footer icons Home, library, playlist, settins -->
+    <div class="mobile-footer">
+        <div class="footer-item">
+            <a href="index.html" class="fa fa-home"></a>
+            <p>Home</p>
+        </div>
+        <div class="footer-item">
+            <a href="shorts.html" class="fa fa-play-circle"></a>
+            <p>Shorts</p>
+        </div>
+        <div class="footer-item">
+            <a href="#music" class="fa fa-music"></a>
+            <p>Music</p>
+        </div>
+        <div class="footer-item">
+            <a href="#settings-popup" id="footer-set-btn" class="fa fa-cog"></a>
+            <p>Settings</p>
+        </div>
+    </div>
+    <!------------Shorts---------->
+    <script>
+        let currentIndex = 0;
+        let players = [];
+    
+        // Load YouTube API
+        function loadYouTubeAPI() {
+            const tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            document.body.appendChild(tag);
+        }
+    
+        // YouTube API callback
+        function onYouTubeIframeAPIReady() {
+            fetchYouTubeShorts();
+        }
+    
+        async function fetchYouTubeShorts() {
+            const apiKey = "AIzaSyCZvjOvisP6rWfj-1r4QE9LRswuH4ak4x4";
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=shorts&type=video&maxResults=10&videoDuration=short&key=${apiKey}`;
+    
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.items && data.items.length > 0) {
+                    renderShorts(data.items);
+                } else {
+                    document.getElementById("shortsList").innerHTML = "<p>No shorts found.</p>";
+                }
+            } catch (error) {
+                console.error("API error:", error);
+            }
+        }
+    
+        function renderShorts(videos) {
+            const container = document.getElementById("shortsList");
+            container.innerHTML = "";
+            players = [];
+    
+            videos.forEach((video, index) => {
+                const videoId = video.id.videoId;
+                const div = document.createElement("div");
+                div.className = "short-item";
+    
+                const iframe = document.createElement("div");
+                iframe.id = `player${index}`;
+                div.appendChild(iframe);
+                container.appendChild(div);
+    
+                // Player creation
+                const player = new YT.Player(`player${index}`, {
+                    videoId: videoId,
+                    playerVars: {
+                        autoplay: 0,
+                        controls: 1,
+                        rel: 0,
+                        showinfo: 0,
+                    },
+                    events: {
+                        onReady: () => {
+                            if (index === 0) player.playVideo();
+                        }
+                    }
+                });
+    
+                players.push(player);
+            });
+        }
+    
+        function scrollToShort(index) {
+            if (index < 0 || index >= players.length) return;
+    
+            document.getElementById(`player${index}`).parentElement.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+    
+            // Pause all
+            players.forEach((p, i) => {
+                try {
+                    if (i === index) {
+                        p.playVideo();
+                    } else {
+                        p.pauseVideo();
+                    }
+                } catch (e) {}
+            });
+    
+            currentIndex = index;
+        }
+    
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "ArrowDown") {
+                scrollToShort(currentIndex + 1);
+            } else if (event.key === "ArrowUp") {
+                scrollToShort(currentIndex - 1);
+            }
+        });
+    
+        // Load YouTube API on DOM Ready
+        document.addEventListener("DOMContentLoaded", () => {
+            loadYouTubeAPI();
+        });
+    </script>
+    
+    
+
+    <script src="/js/mp4.js"></script>
+    <script src="/js/footer-popup.js"></script>
+
+    <script>
+        if (window.jQuery) {
+            delete window.jQuery;
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</body>
+
+</html>
